@@ -86,6 +86,11 @@ ifeq ($(TARGET_USES_INTERACTION_BOOST),true)
     LOCAL_CFLAGS += -DINTERACTION_BOOST
 endif
 
+ifneq ($(TARGET_POWERHAL_MODE_EXT),)
+    LOCAL_CFLAGS += -DMODE_EXT
+    LOCAL_SRC_FILES += ../../../../$(TARGET_POWERHAL_MODE_EXT)
+endif
+
 ifeq ($(call is-board-platform-in-list,trinket), true)
 LOCAL_MODULE := power.qcom
 LOCAL_MODULE_TAGS := optional
