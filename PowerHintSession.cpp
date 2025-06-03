@@ -277,7 +277,7 @@ double PowerHintSessionImpl::nextSupportedFPS(double fps) {
 
 ndk::ScopedAStatus PowerHintSessionImpl::updateTargetWorkDuration(int64_t in_targetDurationNanos){
     // TODO: top app is game check
-    LOG(INFO) << "PowerHintSessionImpl::updateTargetWorkDuration: " << in_targetDurationNanos;
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::updateTargetWorkDuration: " << in_targetDurationNanos;
     if(in_targetDurationNanos <= 0) {
         LOG(ERROR) << "Invalid target work duration";
         return ndk::ScopedAStatus::fromExceptionCode(EX_ILLEGAL_ARGUMENT);
@@ -294,7 +294,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::updateTargetWorkDuration(int64_t in_tar
 
 ndk::ScopedAStatus PowerHintSessionImpl::reportActualWorkDuration(const std::vector<::aidl::android::hardware::power::WorkDuration>& in_durations){
     // TODO: top app is game check
-    LOG(INFO) << "PowerHintSessionImpl::reportActualWorkDuration: ";
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::reportActualWorkDuration: ";
     int64_t targetWorkDurationNanos = mTargetWorkDurationNanos;
     if(targetWorkDurationNanos == -1 || in_durations.empty()) {
         return ndk::ScopedAStatus::ok();
@@ -321,7 +321,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::reportActualWorkDuration(const std::vec
     return ndk::ScopedAStatus::ok();
 }
 ndk::ScopedAStatus PowerHintSessionImpl::pause(){
-    LOG(INFO) << "PowerHintSessionImpl::pause ";
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::pause ";
     if(isSessionAlive(this)) {
         sendHint(aidl::android::hardware::power::SessionHint::CPU_LOAD_RESET);
         setSessionActivity(this, false);
@@ -329,7 +329,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::pause(){
     return ndk::ScopedAStatus::ok();
 }
 ndk::ScopedAStatus PowerHintSessionImpl::resume(){
-    LOG(INFO) << "PowerHintSessionImpl::resume ";
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::resume ";
     if(isSessionAlive(this)) {
         sendHint(aidl::android::hardware::power::SessionHint::CPU_LOAD_RESUME);
         setSessionActivity(this, true);
@@ -337,7 +337,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::resume(){
     return ndk::ScopedAStatus::ok();
 }
 ndk::ScopedAStatus PowerHintSessionImpl::close(){
-    LOG(INFO) << "PowerHintSessionImpl::close ";
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::close ";
     if(isSessionAlive(this)) {
         sendHint(aidl::android::hardware::power::SessionHint::CPU_LOAD_RESET);
         taskLoadBoost(LOAD_RESET);
@@ -351,7 +351,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::close(){
     return ndk::ScopedAStatus::ok();
 }
 ndk::ScopedAStatus PowerHintSessionImpl::sendHint(aidl::android::hardware::power::SessionHint hint){
-    LOG(INFO) << "PowerHintSessionImpl::sendHint ";
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::sendHint ";
     if(!isSessionActive(this))
         return ndk::ScopedAStatus::fromExceptionCode(EX_ILLEGAL_STATE);
     switch(hint)
@@ -377,7 +377,7 @@ ndk::ScopedAStatus PowerHintSessionImpl::sendHint(aidl::android::hardware::power
     return ndk::ScopedAStatus::ok();
 }
 ndk::ScopedAStatus PowerHintSessionImpl::setThreads(const std::vector<int32_t>& threadIds){
-    LOG(INFO) << "PowerHintSessionImpl::setThreads " << printThreads(threadIds, static_cast<int>(threadIds.size()));
+    if(mDebug) LOG(INFO) << "PowerHintSessionImpl::setThreads " << printThreads(threadIds, static_cast<int>(threadIds.size()));
     if (threadIds.size() == 0) {
         LOG(ERROR) << "Threads list is empty";
         return ndk::ScopedAStatus::fromExceptionCode(EX_ILLEGAL_ARGUMENT);
